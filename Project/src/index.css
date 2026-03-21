@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #16a34a;
+  --color-primary-dark: #15803d;
+  --color-primary-light: #22c55e;
+  --color-accent: #ca8a04;
+  --color-accent-dark: #a16207;
+  --color-accent-light: #eab308;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --animate-slide-in: slideIn 0.3s ease;
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-slate-900 font-sans antialiased;
+  }
+}

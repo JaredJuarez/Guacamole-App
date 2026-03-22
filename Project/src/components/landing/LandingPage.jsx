@@ -1,10 +1,23 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, QrCode, MapPin, Truck, Eye } from "lucide-react";
+import {
+  ArrowRight,
+  Shield,
+  QrCode,
+  MapPin,
+  Truck,
+  Eye,
+  X,
+} from "lucide-react";
 import { Button } from "../common/Button";
 import { GuacamoleIcon } from "../common/GuacamoleLogo";
 import heroBg from "../../assets/hero.jpg";
+import productorImg from "../../assets/productor.jpg";
+import intermediarioImg from "../../assets/intermediario.jpg";
+import consumidorImg from "../../assets/consumidor.jpg";
 
 export default function LandingPage() {
+  const [showProfileModal, setShowProfileModal] = useState(false);
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -23,11 +36,14 @@ export default function LandingPage() {
             >
               Powered by Stellar
             </a>
-            <Link to="/app">
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="border-none bg-none p-0"
+            >
               <Button size="sm">
                 Probar Demo <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
-            </Link>
+            </button>
           </div>
         </div>
       </nav>
@@ -60,11 +76,14 @@ export default function LandingPage() {
               intermediarios y consumidores.
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-4">
-              <Link to="/app">
+              <button
+                onClick={() => setShowProfileModal(true)}
+                className="border-none bg-none p-0"
+              >
                 <Button size="lg">
                   Comenzar Demo <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </Link>
+              </button>
               <Link to="/app/traceability/demo">
                 <Button
                   variant="outline"
@@ -76,6 +95,83 @@ export default function LandingPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Role Cards */}
+      <section className="max-w-5xl mx-auto px-4 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-slate-900 mb-3">
+            Elige tu perfil
+          </h2>
+          <p className="text-slate-500">
+            Cada actor de la cadena tiene su propio flujo
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          <Link to="/app/register-orchard">
+            <div className="group bg-white rounded-2xl border-2 border-green-200 hover:border-green-500 hover:shadow-lg p-8 text-center transition-all cursor-pointer">
+              <div className="w-40 h-40 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md border-2 border-green-200 group-hover:shadow-lg transition-all">
+                <img
+                  src={productorImg}
+                  alt="Productor"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-xl text-slate-900 mb-2">
+                Productor
+              </h3>
+              <p className="text-slate-500 text-sm mb-4">
+                Registra tu huerta y genera NFTs de tus cosechas con
+                trazabilidad completa
+              </p>
+              <span className="inline-block bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full group-hover:bg-green-700 transition-colors">
+                Entrar como Productor →
+              </span>
+            </div>
+          </Link>
+          <Link to="/app/qr-scanner">
+            <div className="group bg-white rounded-2xl border-2 border-blue-200 hover:border-blue-500 hover:shadow-lg p-8 text-center transition-all cursor-pointer">
+              <div className="w-40 h-40 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md border-2 border-blue-200 group-hover:shadow-lg transition-all">
+                <img
+                  src={intermediarioImg}
+                  alt="Intermediario"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-xl text-slate-900 mb-2">
+                Intermediario
+              </h3>
+              <p className="text-slate-500 text-sm mb-4">
+                Escanea el QR del lote, verifica la calidad y firma la recepción
+                en blockchain
+              </p>
+              <span className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full group-hover:bg-blue-700 transition-colors">
+                Entrar como Intermediario →
+              </span>
+            </div>
+          </Link>
+          <Link to="/trace/demo">
+            <div className="group bg-white rounded-2xl border-2 border-amber-200 hover:border-amber-500 hover:shadow-lg p-8 text-center transition-all cursor-pointer">
+              <div className="w-40 h-40 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md border-2 border-amber-200 group-hover:shadow-lg transition-all">
+                <img
+                  src={consumidorImg}
+                  alt="Consumidor"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-xl text-slate-900 mb-2">
+                Consumidor
+              </h3>
+              <p className="text-slate-500 text-sm mb-4">
+                Escanea el QR del producto y verifica todo el recorrido desde la
+                huerta hasta ti
+              </p>
+              <span className="inline-block bg-amber-600 text-white text-xs font-semibold px-4 py-2 rounded-full group-hover:bg-amber-700 transition-colors">
+                Ver trazabilidad demo →
+              </span>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -160,11 +256,14 @@ export default function LandingPage() {
           Prueba el demo completo y descubre cómo la blockchain puede garantizar
           la transparencia de tus productos.
         </p>
-        <Link to="/app">
+        <button
+          onClick={() => setShowProfileModal(true)}
+          className="border-none bg-none p-0"
+        >
           <Button size="lg">
             Probar Demo Ahora <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-        </Link>
+        </button>
       </section>
 
       {/* Footer */}
@@ -179,6 +278,93 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Profile Selection Modal */}
+      {showProfileModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100">
+              <h2 className="text-2xl font-bold text-slate-900">
+                Elige tu perfil
+              </h2>
+              <button
+                onClick={() => setShowProfileModal(false)}
+                className="text-slate-400 hover:text-slate-600 transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="p-6 grid md:grid-cols-3 gap-4">
+              <Link
+                to="/app/register-orchard"
+                onClick={() => setShowProfileModal(false)}
+              >
+                <div className="group bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-2 border-green-200 hover:border-green-500 hover:shadow-lg p-6 text-center transition-all cursor-pointer h-full">
+                  <div className="w-32 h-32 mx-auto mb-3 rounded-xl overflow-hidden shadow-md border-2 border-green-200 group-hover:shadow-lg transition-all">
+                    <img
+                      src={productorImg}
+                      alt="Productor"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2">
+                    Productor
+                  </h3>
+                  <p className="text-slate-600 text-sm mb-4">
+                    Registra tu huerta y genera NFTs
+                  </p>
+                  <span className="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full group-hover:bg-green-700 transition-colors">
+                    Entrar →
+                  </span>
+                </div>
+              </Link>
+              <Link
+                to="/app/qr-scanner"
+                onClick={() => setShowProfileModal(false)}
+              >
+                <div className="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200 hover:border-blue-500 hover:shadow-lg p-6 text-center transition-all cursor-pointer h-full">
+                  <div className="w-32 h-32 mx-auto mb-3 rounded-xl overflow-hidden shadow-md border-2 border-blue-200 group-hover:shadow-lg transition-all">
+                    <img
+                      src={intermediarioImg}
+                      alt="Intermediario"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2">
+                    Intermediario
+                  </h3>
+                  <p className="text-slate-600 text-sm mb-4">
+                    Verifica calidad y recepción
+                  </p>
+                  <span className="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full group-hover:bg-blue-700 transition-colors">
+                    Entrar →
+                  </span>
+                </div>
+              </Link>
+              <Link to="/trace/demo" onClick={() => setShowProfileModal(false)}>
+                <div className="group bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border-2 border-amber-200 hover:border-amber-500 hover:shadow-lg p-6 text-center transition-all cursor-pointer h-full">
+                  <div className="w-32 h-32 mx-auto mb-3 rounded-xl overflow-hidden shadow-md border-2 border-amber-200 group-hover:shadow-lg transition-all">
+                    <img
+                      src={consumidorImg}
+                      alt="Consumidor"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2">
+                    Consumidor
+                  </h3>
+                  <p className="text-slate-600 text-sm mb-4">
+                    Verifica trazabilidad del producto
+                  </p>
+                  <span className="inline-block bg-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full group-hover:bg-amber-700 transition-colors">
+                    Ver →
+                  </span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -21,6 +21,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/trace/:loteId" element={<TraceabilityView />} />
       <Route path="/app" element={<AppLayout />}>
         <Route index element={<AppIndex />} />
         <Route path="register-orchard" element={<RegisterOrchard />} />

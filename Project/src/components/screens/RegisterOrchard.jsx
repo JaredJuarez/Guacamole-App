@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Leaf, Loader2, Camera, AlertCircle } from "lucide-react";
+import { MapPin, Leaf, Camera, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "../common/Button";
 import { Card } from "../common/Card";
 import { Spinner } from "../common/Spinner";
@@ -18,78 +18,87 @@ export default function RegisterOrchard() {
   const [step, setStep] = useState("camera"); // camera | form
   const [photoData, setPhotoData] = useState(null);
   const [extractedGPS, setExtractedGPS] = useState(null);
+  const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [form, setForm] = useState({ name: "", owner: "" });
   const [minting, setMinting] = useState(false);
 
+  const tryGeolocation = () => {
+    if (!navigator.geolocation) {
+      setGpsError("Geolocalización no disponible en este navegador.");
+      return;
+    }
+    setGpsLoading(true);
+    setGpsError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setExtractedGPS({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+        setGpsLoading(false);
+        addToast("Ubicación GPS obtenida", "success");
+      },
+      () => {
+        setGpsLoading(false);
+        setGpsError("Permiso denegado. Se registrará sin coordenadas GPS.");
+        addToast("GPS no disponible. Puedes continuar sin ubicación.", "info");
+      },
+      { timeout: 8000 },
+    );
+  };
+
   const handlePhotoCapture = async (dataUrl) => {
     setPhotoData(dataUrl);
-
-    // Intentar extraer GPS de EXIF
-    const gps = await extractGPSFromImage(dataUrl);
-    if (gps) {
-      setExtractedGPS(gps);
-      setGpsError(null);
-      addToast("✓ Ubicación extraída del EXIF de la foto", "success");
-    } else {
-      setExtractedGPS(null);
-      setGpsError(
-        "No se encontraron coordenadas GPS en la foto. Asegúrate de que el GPS esté habilitado en tu dispositivo.",
-      );
-      addToast(
-        "⚠ No se encontró GPS en los metadatos. Por favor, retoma la foto con GPS habilitado.",
-        "error",
-      );
-    }
-
     setStep("form");
+    // Try EXIF GPS first
+    const exifGps = await extractGPSFromImage(dataUrl);
+    if (exifGps) {
+      setExtractedGPS(exifGps);
+      addToast("Ubicación extraída del EXIF", "success");
+      return;
+    }
+    // Fallback: browser Geolocation API (works on HTTP localhost)
+    tryGeolocation();
   };
 
   const handleRetake = () => {
     setPhotoData(null);
     setExtractedGPS(null);
     setGpsError(null);
+    setGpsLoading(false);
     setStep("camera");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!form.name || !form.owner) {
       addToast("Completa todos los campos", "error");
       return;
     }
-
-    if (!extractedGPS) {
-      addToast("Se requieren coordenadas GPS de la foto", "error");
-      return;
-    }
-
     setMinting(true);
     try {
       const result = await mintToBlockchain({
         type: "orchard",
         name: form.name,
         owner: form.owner,
-        lat: extractedGPS.lat,
-        lng: extractedGPS.lng,
+        lat: extractedGPS?.lat ?? null,
+        lng: extractedGPS?.lng ?? null,
       });
-
       dispatch({
         type: "REGISTER_ORCHARD",
         payload: {
           id: result.txHash.substring(0, 12),
           name: form.name,
           owner: form.owner,
-          lat: extractedGPS.lat,
-          lng: extractedGPS.lng,
+          lat: extractedGPS?.lat ?? null,
+          lng: extractedGPS?.lng ?? null,
           photoUrl: photoData,
           txHash: result.txHash,
           timestamp: result.timestamp,
         },
       });
-
-      addToast("¡Huerta registrada exitosamente en blockchain!", "success");
+      addToast("Huerta registrada exitosamente en blockchain!", "success");
       navigate("/app/dashboard");
     } catch {
       addToast("Error al registrar huerta", "error");
@@ -135,24 +144,20 @@ export default function RegisterOrchard() {
         </div>
       </div>
 
-      {/* PASO 1: Captura de foto */}
       {step === "camera" && (
         <div>
           <Card className="mb-4">
-            <p className="text-sm text-slate-600 mb-3">
-              Toma una foto clara de tu huerta. Asegúrate de que el{" "}
-              <strong>GPS esté habilitado</strong> en tu dispositivo para
-              extraer automáticamente la ubicación.
+            <p className="text-sm text-slate-600">
+              Toma una foto de tu huerta. La ubicacion GPS se obtendra
+              automaticamente del navegador.
             </p>
           </Card>
           <CameraCapture onCapture={handlePhotoCapture} />
         </div>
       )}
 
-      {/* PASO 2: Formulario de datos */}
       {step === "form" && (
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Preview foto + GPS */}
           <Card className="bg-slate-50 border-slate-200">
             <div className="space-y-3">
               {photoData && (
@@ -162,13 +167,20 @@ export default function RegisterOrchard() {
                   className="w-full h-40 object-cover rounded-xl"
                 />
               )}
-
-              {extractedGPS && (
+              {gpsLoading && (
+                <div className="flex items-center gap-3 bg-blue-50 p-3 rounded-xl border border-blue-100">
+                  <Loader2 className="w-5 h-5 text-blue-500 animate-spin shrink-0" />
+                  <p className="text-sm text-blue-700">
+                    Obteniendo ubicacion GPS...
+                  </p>
+                </div>
+              )}
+              {extractedGPS && !gpsLoading && (
                 <div className="flex items-start gap-3 bg-green-50 p-3 rounded-xl border border-green-100">
                   <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <div className="text-sm min-w-0">
                     <p className="font-semibold text-primary">
-                      Ubicación capturada del EXIF
+                      Ubicacion capturada
                     </p>
                     <p className="text-slate-600 font-mono text-xs break-all">
                       {extractedGPS.lat.toFixed(6)},{" "}
@@ -177,14 +189,22 @@ export default function RegisterOrchard() {
                   </div>
                 </div>
               )}
-
-              {gpsError && (
+              {gpsError && !gpsLoading && (
                 <div className="flex items-start gap-3 bg-amber-50 p-3 rounded-xl border border-amber-200">
                   <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="text-xs text-amber-700">{gpsError}</p>
+                  <div className="text-xs text-amber-700">
+                    <p className="font-semibold mb-1">Sin coordenadas GPS</p>
+                    <p>{gpsError}</p>
+                    <button
+                      type="button"
+                      onClick={tryGeolocation}
+                      className="mt-2 text-amber-800 underline font-semibold"
+                    >
+                      Intentar de nuevo
+                    </button>
+                  </div>
                 </div>
               )}
-
               <Button
                 type="button"
                 variant="ghost"
@@ -197,7 +217,6 @@ export default function RegisterOrchard() {
             </div>
           </Card>
 
-          {/* Datos de la huerta */}
           <Card>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               Nombre de la Huerta
@@ -231,9 +250,9 @@ export default function RegisterOrchard() {
               className="flex-1"
               onClick={handleRetake}
             >
-              Atrás
+              Atras
             </Button>
-            <Button type="submit" className="flex-1" disabled={!extractedGPS}>
+            <Button type="submit" className="flex-1">
               <Leaf className="w-5 h-5 mr-2" /> Registrar Huerta
             </Button>
           </div>

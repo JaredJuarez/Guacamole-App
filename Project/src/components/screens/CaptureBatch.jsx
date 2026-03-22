@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Package, MapPin, Weight, AlertCircle } from "lucide-react";
+import { Package, MapPin, Weight, AlertCircle, Loader2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "../common/Button";
 import { Card } from "../common/Card";
@@ -23,28 +23,52 @@ export default function CaptureBatch() {
 
   const [photo, setPhoto] = useState(null);
   const [extractedGPS, setExtractedGPS] = useState(null);
+  const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [weight, setWeight] = useState("");
   const [minting, setMinting] = useState(false);
   const [qrModal, setQrModal] = useState(false);
   const [newLote, setNewLote] = useState(null);
 
+  const tryGeolocation = () => {
+    if (!navigator.geolocation) {
+      setGpsError("Geolocalización no disponible.");
+      return;
+    }
+    setGpsLoading(true);
+    setGpsError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setExtractedGPS({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+        setGpsLoading(false);
+        addToast("Ubicación GPS obtenida", "success");
+      },
+      () => {
+        setGpsLoading(false);
+        setGpsError(
+          "GPS no disponible. El lote se registrará sin coordenadas.",
+        );
+        addToast("Sin GPS. Puedes continuar sin ubicación.", "info");
+      },
+      { timeout: 8000 },
+    );
+  };
+
   const handleCapture = async (dataUrl) => {
     setPhoto(dataUrl);
-
-    // Extraer GPS del EXIF de la foto
+    // Try EXIF GPS first
     const gps = await extractGPSFromImage(dataUrl);
     if (gps) {
       setExtractedGPS(gps);
       setGpsError(null);
-      addToast("✓ Ubicación extraída del EXIF", "success");
-    } else {
-      setExtractedGPS(null);
-      setGpsError(
-        "No se encontraron coordenadas GPS en la foto. Asegúrate de que el GPS esté habilitado.",
-      );
-      addToast("⚠ Sin GPS en los metadatos de la foto", "error");
+      addToast("Ubicación extraída del EXIF", "success");
+      return;
     }
+    // Fallback: browser Geolocation API
+    tryGeolocation();
   };
 
   const handleMint = async () => {
@@ -56,11 +80,6 @@ export default function CaptureBatch() {
       addToast("Ingresa un peso válido", "error");
       return;
     }
-    if (!extractedGPS) {
-      addToast("Se requieren coordenadas GPS de la foto", "error");
-      return;
-    }
-
     setMinting(true);
     try {
       const loteId = generateLoteId();
@@ -72,16 +91,16 @@ export default function CaptureBatch() {
         type: "batch",
         loteId,
         weight: parseFloat(weight),
-        lat: extractedGPS.lat,
-        lng: extractedGPS.lng,
+        lat: extractedGPS?.lat ?? null,
+        lng: extractedGPS?.lng ?? null,
         photoHash,
       });
 
       const lote = {
         id: loteId,
         photoUrl: photo,
-        lat: extractedGPS.lat,
-        lng: extractedGPS.lng,
+        lat: extractedGPS?.lat ?? null,
+        lng: extractedGPS?.lng ?? null,
         weight: parseFloat(weight),
         txHash: result.txHash,
         photoHash,
@@ -154,16 +173,31 @@ export default function CaptureBatch() {
         </Card>
       )}
 
+      {/* GPS loading */}
+      {gpsLoading && (
+        <Card className="mb-5 bg-blue-50 border-blue-200">
+          <div className="flex items-center gap-3">
+            <Loader2 className="w-5 h-5 text-blue-500 animate-spin shrink-0" />
+            <p className="text-sm text-blue-700">Obteniendo ubicación GPS...</p>
+          </div>
+        </Card>
+      )}
+
       {/* GPS info - Error */}
-      {gpsError && (
+      {gpsError && !gpsLoading && (
         <Card className="mb-5 bg-amber-50 border-amber-200">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-sm">
-              <p className="font-semibold text-amber-900">
-                Sin GPS en los metadatos
-              </p>
+              <p className="font-semibold text-amber-900">Sin GPS</p>
               <p className="text-amber-700 text-xs">{gpsError}</p>
+              <button
+                type="button"
+                onClick={tryGeolocation}
+                className="mt-1 text-amber-800 underline text-xs font-semibold"
+              >
+                Intentar de nuevo
+              </button>
             </div>
           </div>
         </Card>
@@ -191,7 +225,7 @@ export default function CaptureBatch() {
         onClick={handleMint}
         className="w-full"
         size="lg"
-        disabled={!photo || !extractedGPS || !weight || parseFloat(weight) <= 0}
+        disabled={!photo || !weight || parseFloat(weight) <= 0}
       >
         <Package className="w-5 h-5 mr-2" /> Generar NFT de Lote
       </Button>

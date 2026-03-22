@@ -1,6 +1,6 @@
 # Guacamole
 <div align="center">
-  <img src="./src/assets/guacamole_logo.jpg" alt="Guacamole Logo" width="400" />
+  <img src="./Project/src/assets/guacamole_logo.jpg" alt="Guacamole Logo" width="400" />
 </div>
 
 > **Blockchain-powered agricultural supply chain traceability** — From farm to table with complete transparency

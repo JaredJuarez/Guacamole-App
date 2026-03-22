@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Leaf, Home, ScanLine, LogOut } from "lucide-react";
+import { Home, ScanLine, LogOut } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { GuacamoleIcon } from "../components/common/GuacamoleLogo";
 
 export default function AppLayout() {
   const location = useLocation();
@@ -23,10 +24,8 @@ export default function AppLayout() {
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           <Link to="/app/dashboard" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Leaf className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold text-slate-900">AgroChain</span>
+            <GuacamoleIcon size={28} />
+            <span className="text-lg font-bold text-slate-900">Guacamole</span>
           </Link>
 
           <div className="flex items-center gap-1">

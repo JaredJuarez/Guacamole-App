@@ -1,15 +1,8 @@
 import { Link } from "react-router-dom";
-import {
-  Leaf,
-  ArrowRight,
-  Shield,
-  QrCode,
-  MapPin,
-  Truck,
-  Eye,
-  Github,
-} from "lucide-react";
+import { ArrowRight, Shield, QrCode, MapPin, Truck, Eye } from "lucide-react";
 import { Button } from "../common/Button";
+import { GuacamoleIcon } from "../common/GuacamoleLogo";
+import heroBg from "../../assets/hero.jpg";
 
 export default function LandingPage() {
   return (
@@ -18,10 +11,8 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900">AgroChain</span>
+            <GuacamoleIcon size={32} />
+            <span className="text-xl font-bold text-slate-900">Guacamole</span>
           </Link>
           <div className="flex items-center gap-3">
             <a
@@ -42,39 +33,56 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
-        <div className="inline-flex items-center gap-2 bg-green-50 text-primary text-sm font-semibold px-4 py-2 rounded-full mb-6">
-          <Shield className="w-4 h-4" />
-          Verificado en Blockchain Stellar
-        </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
-          Trazabilidad agrícola
-          <br />
-          <span className="text-primary">del campo a tu mesa</span>
-        </h1>
-        <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-10">
-          Registra, verifica y comparte el origen de tus productos agrícolas con
-          tecnología blockchain. Transparencia total para productores,
-          intermediarios y consumidores.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/app">
-            <Button size="lg">
-              Comenzar Demo <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
-          <Link to="/app/traceability/demo">
-            <Button variant="outline" size="lg">
-              <Eye className="w-5 h-5 mr-2" /> Ver Ejemplo de Trazabilidad
-            </Button>
-          </Link>
+      <section className="relative min-h-[600px] flex items-center overflow-hidden">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroBg})` }}
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/25" />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 py-24 h-[calc(100vh-4rem)] w-screen">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
+              <Shield className="w-4 h-4" />
+              Verificado en Blockchain Stellar
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
+              Trazabilidad agrícola
+              <br />
+              <span className="text-green-400">del campo a tu mesa</span>
+            </h1>
+            <p className="text-lg text-white/80 max-w-xl mb-10 leading-relaxed">
+              Registra, verifica y comparte el origen de tus productos agrícolas
+              con tecnología blockchain. Transparencia total para productores,
+              intermediarios y consumidores.
+            </p>
+            <div className="flex flex-col sm:flex-row items-start gap-4">
+              <Link to="/app">
+                <Button size="lg">
+                  Comenzar Demo <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/app/traceability/demo">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-white/60 text-white hover:bg-white/10"
+                >
+                  <Eye className="w-5 h-5 mr-2" /> Ver Ejemplo de Trazabilidad
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Features */}
       <section className="max-w-6xl mx-auto px-4 pb-24">
         <div className="text-center mb-14">
-          <h2 className="text-3xl font-bold text-slate-900 mb-3">
+          <h2 className="text-3xl font-bold text-slate-900 my-3">
             ¿Cómo funciona?
           </h2>
           <p className="text-slate-500">
@@ -163,8 +171,8 @@ export default function LandingPage() {
       <footer className="border-t border-slate-100 py-8">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-slate-400">
-            <Leaf className="w-4 h-4 text-primary" />
-            <span>AgroChain © 2026 — Mx Alebrijes</span>
+            <GuacamoleIcon size={16} />
+            <span>Guacamole © 2026 — Mx Alebrijes</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-slate-400">
             <span>Construido con Stellar & Soroban</span>

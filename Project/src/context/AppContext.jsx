@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 
 const AppContext = createContext(null);
 
-const STORAGE_KEY = "agrochain-state";
+const STORAGE_KEY = "guacamole-state";
 
 const initialState = {
   user: null, // { name, role, orchardId }

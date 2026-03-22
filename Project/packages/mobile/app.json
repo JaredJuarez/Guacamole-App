@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Guacamole-MovilApp",
+    "slug": "guacamole-movil-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mxalebrige.guacamole",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Se necesita acceso a la cámara para capturar fotos de huertas y lotes.",
+        "NSLocationWhenInUseUsageDescription": "Se necesita tu ubicación para geolocalizar las huertas y lotes."
+      }
+    },
+    "android": {
+      "package": "com.mxalebrige.guacamole",
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Se necesita acceso a la cámara para capturar fotos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Se necesita tu ubicación para geolocalizar."
+        }
+      ],
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Se necesita acceso a la cámara para escanear códigos QR."
+        }
+      ]
+    ]
+  }
+}

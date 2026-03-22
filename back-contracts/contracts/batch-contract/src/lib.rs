@@ -372,8 +372,7 @@ mod tests {
                 &String::from_str(&env, "in_transit"),
                 &String::from_str(&env, "db://transport"),
                 &bytes(&env, 6),
-            )
-            .unwrap();
+            );
         assert_eq!(index, 1);
 
         client
@@ -386,8 +385,7 @@ mod tests {
                 &String::from_str(&env, "inspected"),
                 &String::from_str(&env, "db://inspect"),
                 &bytes(&env, 9),
-            )
-            .unwrap();
+            );
 
         client
             .add_checkpoint(
@@ -399,10 +397,9 @@ mod tests {
                 &String::from_str(&env, "delivered"),
                 &String::from_str(&env, "db://deliver"),
                 &bytes(&env, 12),
-            )
-            .unwrap();
+            );
 
-        let history = client.get_history().unwrap();
+        let history = client.get_history();
         assert_eq!(history.len(), 4);
     }
 
@@ -466,7 +463,7 @@ mod tests {
         let client = BatchContractClient::new(&env, &contract_id);
 
         env.mock_all_auths();
-        client.close_batch(&BatchStatus::Closed).unwrap();
+        client.close_batch(&BatchStatus::Closed);
         assert_eq!(client.get_summary().status, BatchStatus::Closed);
     }
 }

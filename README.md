@@ -13,98 +13,98 @@
 
 ---
 
-## Descripción
+## Description
 
-**Guacamole** es una plataforma web de trazabilidad agrícola que utiliza blockchain (Stellar/Soroban) para garantizar transparencia total en la cadena de suministro. Cada producto se registra como un NFT verificable, permitiendo a productores, intermediarios y consumidores rastrear el viaje completo desde la huerta hasta la mesa.
+**Guacamole** is a web-based agricultural traceability platform that uses blockchain (Stellar/Soroban) to guarantee complete transparency in the supply chain. Each product is registered as a verifiable NFT, allowing producers, intermediaries, and consumers to track the complete journey from farm to table.
 
-### ¿Por qué Guacamole?
+### Why Guacamole?
 
-Guacamole está hecho de ingredientes naturales verificables, cada uno con su origen. Al igual que el guacamole, nuestro sistema verifica el origen de cada ingrediente (producto agrícola) a través de la cadena de suministro.
-
----
-
-## Características Principales
-
-### 3 Perfiles de Usuario
-
-#### Productor — Origen Verificado
-
-- Registra su huerta con foto + geolocalización GPS
-- Crea lotes de cosecha con documentación fotográfica
-- Genera NFTs únicos por cada lote (código QR incluido)
-- Accede a dashboard con historial de cosechas
-- **Flujo**: `Registrar Huerta` → `Dashboard` → `Capturar Cosecha`
-
-#### Intermediario — Verificación en Tránsito
-
-- Escanea códigos QR de lotes recibidos
-- Registra métricas de calidad (Brix, temperatura, destino)
-- Firma digitalmente la recepción en blockchain
-- Crea auditoría inmutable de inspección
-- **Flujo**: Escanear QR → Ingresar datos de calidad → Confirmar recepción
-
-#### Consumidor — Transparencia Total
-
-- Escanea QR en el producto para ver trazabilidad completa
-- Visualiza timeline de **Origen** → **Cosecha** → **Entrega**
-- Verifica autenticidad en blockchain
-- Acceso público sin autenticación
-- **Flujo**: `Escanear QR` → Ver timeline de trazabilidad
+Guacamole is made from verifiable natural ingredients, each with its own origin. Just like guacamole, our system verifies the origin of each ingredient (agricultural product) through the supply chain.
 
 ---
 
-## Inicio Rápido
+## Main Features
 
-### Requisitos Previos
+### 3 User Profiles
+
+#### Producer — Verified Origin
+
+- Register your orchard with photo + GPS geolocation
+- Create harvest batches with photographic documentation
+- Generate unique NFTs for each batch (QR code included)
+- Access dashboard with harvest history
+- **Flow**: `Register Orchard` → `Dashboard` → `Capture Harvest`
+
+#### Intermediary — Transit Verification
+
+- Scan QR codes of received batches
+- Record quality metrics (Brix, temperature, destination)
+- Digitally sign receipt on blockchain
+- Create immutable inspection audit
+- **Flow**: Scan QR → Enter quality data → Confirm receipt
+
+#### Consumer — Complete Transparency
+
+- Scan QR on product to see complete traceability
+- Visualize timeline of **Origin** → **Harvest** → **Delivery**
+- Verify authenticity on blockchain
+- Public access without authentication
+- **Flow**: `Scan QR` → View traceability timeline
+
+---
+
+## Quick Start
+
+### Prerequisites
 
 - Node.js 18+
 - npm 9+
-- Camera access (para captura de fotos y escaneo QR)
+- Camera access (for photo capture and QR scanning)
 
-### Instalación
+### Installation
 
 ```bash
-# Clonar repositorio
+# Clone repository
 git clone <repo-url>
 cd Project
 
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Iniciar servidor de desarrollo
+# Start development server
 npm run dev
 ```
 
-El servidor iniciará en `http://localhost:5173`
+The server will start at `http://localhost:5173`
 
-### Build para Producción
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-Los archivos compilados estarán en `dist/`
+Compiled files will be in `dist/`
 
 ---
 
-## Rutas de la Aplicación
+## Application Routes
 
-| Ruta                        | Descripción                         | Acceso                 |
-| --------------------------- | ----------------------------------- | ---------------------- |
-| `/`                         | Landing page con propuesta de valor | Público                |
-| `/trace/:loteId`            | Vista pública de trazabilidad       | Público (Consumer)     |
-| `/app`                      | App autenticada (hub principal)     | Productores            |
-| `/app/register-orchard`     | Registro inicial de huerta          | Productor (primer uso) |
-| `/app/dashboard`            | Dashboard con lotes registrados     | Productor              |
-| `/app/capture-batch`        | Crear nueva cosecha/lote            | Productor              |
-| `/app/qr-scanner`           | Escanear QR de lotes                | Intermediario          |
-| `/app/traceability/:loteId` | Historial completo de lote          | Productor/Demo         |
+| Route                       | Description                       | Access             |
+| --------------------------- | --------------------------------- | ------------------ |
+| `/`                         | Landing page with value proposal  | Public             |
+| `/trace/:loteId`            | Public traceability view          | Public (Consumer)  |
+| `/app`                      | Authenticated app (main hub)      | Producers          |
+| `/app/register-orchard`     | Initial orchard registration      | Producer (first-time) |
+| `/app/dashboard`            | Dashboard with registered batches | Producer           |
+| `/app/capture-batch`        | Create new harvest/batch          | Producer           |
+| `/app/qr-scanner`           | Scan batch QR codes               | Intermediary       |
+| `/app/traceability/:loteId` | Complete batch history            | Producer/Demo      |
 
 ---
 
-## Arquitectura
+## Architecture
 
-### Stack Tecnológico
+### Technology Stack
 
 ```
 Frontend:
@@ -125,7 +125,7 @@ State:
 └─ localStorage persistence (guacamole-state)
 ```
 
-### Estructura de Carpetas
+### Folder Structure
 
 ```
 src/
@@ -171,7 +171,7 @@ assets/
 └── react.svg / vite.svg        # Build tool logos
 ```
 
-### Flujo de Estado (AppContext)
+### State Flow (AppContext)
 
 ```javascript
 State {
@@ -199,78 +199,78 @@ Actions:
 
 ---
 
-## Funcionalidades Principales
+## Main Features
 
-### Registro de Huerta (Productor)
+### Orchard Registration (Producer)
 
-1. **Captura de Foto**
-   - Acceso a cámara en tiempo real
-   - Preservación automática de metadatos EXIF
-   - Opción de retomar foto
+1. **Photo Capture**
+   - Real-time camera access
+   - Automatic EXIF metadata preservation
+   - Option to retake photo
 
-2. **Geolocalización**
-   - Intenta extraer GPS de EXIF (si cámara tiene GPS)
-   - Fallback automático a Geolocation API del navegador
-   - Funciona en HTTP localhost (sin HTTPS requerido)
-   - Muestra coordenadas con 6 decimales de precisión
+2. **Geolocation**
+   - Attempts to extract GPS from EXIF (if camera has GPS)
+   - Automatic fallback to Browser Geolocation API
+   - Works on HTTP localhost (no HTTPS required)
+   - Displays coordinates with 6 decimal precision
 
-3. **Datos de Huerta**
-   - Nombre de huerta
-   - Nombre del propietario
-   - NFT minting en blockchain (verificable)
+3. **Orchard Data**
+   - Orchard name
+   - Owner name
+   - NFT minting on blockchain (verifiable)
 
-### Captura de Cosecha (Productor)
+### Harvest Capture (Producer)
 
-1. **Documentación Fotográfica**
-   - Captura de foto del lote
-   - Extracción automática de GPS
-   - Validación visual
+1. **Photographic Documentation**
+   - Capture batch photo
+   - Automatic GPS extraction
+   - Visual validation
 
-2. **Peso & Generación de NFT**
-   - Ingresa peso en kg (obligatorio > 0)
-   - Genera ID único: `LOTE-[TIMESTAMP_BASE36]-[RANDOM]`
-   - Crea hash SHA-256 de foto (verificación de integridad)
-   - Minta en blockchain (returns txHash)
+2. **Weight & NFT Generation**
+   - Enter weight in kg (required > 0)
+   - Generate unique ID: `LOTE-[TIMESTAMP_BASE36]-[RANDOM]`
+   - Create SHA-256 photo hash (integrity verification)
+   - Mint on blockchain (returns txHash)
 
-3. **Código QR**
-   - QR generado automáticamente con datos del lote
-   - Escaneable por intermediarios y consumidores
-   - Datos embebidos: loteId, txHash
+3. **QR Code**
+   - QR automatically generated with batch data
+   - Scannable by intermediaries and consumers
+   - Embedded data: batchId, txHash
 
-### Escaneo QR (Intermediario)
+### QR Scanning (Intermediary)
 
-1. **Captura de QR**
-   - Scanner HTML5 con auto-focus
-   - Soporte para búsqueda manual por ID
-   - Fallback para cámaras no compatibles
+1. **QR Capture**
+   - HTML5 scanner with auto-focus
+   - Support for manual ID search
+   - Fallback for incompatible cameras
 
-2. **Verificación de Calidad**
-   - Brix score (medida de madurez/contenido de azúcar)
-   - Temperatura registrada (°C)
-   - Destino final (punto de venta)
+2. **Quality Verification**
+   - Brix score (maturity/sugar content measure)
+   - Recorded temperature (°C)
+   - Final destination (point of sale)
 
-3. **Firma Digital**
-   - Registra reception en blockchain
-   - Marca lote como "Entregado"
-   - Genera txHash de verificación
+3. **Digital Signature**
+   - Record reception on blockchain
+   - Mark batch as "Delivered"
+   - Generate verification txHash
 
-### Timeline de Trazabilidad (Consumidor)
+### Traceability Timeline (Consumer)
 
-**Visualización de 3 etapas:**
+**3-stage visualization:**
 
-| Etapa   | Datos Mostrados                       | Verificación      |
-| ------- | ------------------------------------- | ----------------- |
-| Origen  | Foto huerta, nombre, propietario, GPS | txHash blockchain |
-| Cosecha | Foto lote, peso, GPS, ID, status      | Hash de foto      |
-| Entrega | Brix, temperatura, destino, fecha     | txHash recepción  |
+| Stage    | Data Shown                             | Verification      |
+| -------- | -------------------------------------- | ------------------ |
+| Origin   | Orchard photo, name, owner, GPS        | blockchain txHash  |
+| Harvest  | Batch photo, weight, GPS, ID, status   | Photo hash         |
+| Delivery | Brix, temperature, destination, date   | receipt txHash     |
 
-Acceso público sin autenticación. Demo: `/trace/demo`
+Public access without authentication. Demo: `/trace/demo`
 
 ---
 
-## Diseño & UX
+## Design & UX
 
-### Paleta de Colores
+### Color Palette
 
 ```
 Primary:        #16a34a (Green - Growth/Nature)
@@ -280,21 +280,21 @@ Background:     #f8fafc (Light slate)
 Surface:        #ffffff (White cards)
 ```
 
-### Componentes Reutilizables
+### Reusable Components
 
 - **Button**: 5 variants (primary, secondary, outline, danger, ghost) × 3 sizes (sm, md, lg)
-- **Card**: Flexible surface con opcional onClick
-- **Badge**: Status badges color-coded (Cosechado, Entregado, etc.)
-- **Modal**: Dialog reusable con backdrop
-- **Timeline**: Visualización vertical con nodos verificados
-- **Spinner**: Loading con texto opcional
-- **Toast**: Sistema de notificaciones auto-desestable
+- **Card**: Flexible surface with optional onClick
+- **Badge**: Color-coded status badges (Harvested, Delivered, etc.)
+- **Modal**: Reusable dialog with backdrop
+- **Timeline**: Vertical visualization with verified nodes
+- **Spinner**: Loading indicator with optional text
+- **Toast**: Auto-dismiss notification system
 
 ---
 
-## Integración Blockchain (Stellar)
+## Blockchain Integration (Stellar)
 
-### Contractos/Funciones (Demo)
+### Contracts/Functions (Demo)
 
 ```javascript
 // utils/blockchain.js
@@ -302,96 +302,96 @@ Surface:        #ffffff (White cards)
 mintToBlockchain(data)
   → Inputs: { type, name, owner, lat, lng, ... }
   → Returns: { txHash, timestamp, data }
-  → Simula 2s de transacción en demo
+  → Simulates 2s transaction in demo
 
 generateHash(input)
   → SHA-256 digest
-  → Usado para verificación de integridad de fotos
+  → Used for photo integrity verification
 
 generateLoteId()
-  → Crea ID único: LOTE-[TIMESTAMP_BASE36]-[RANDOM_4]
-  → Garantiza unicidad + legibilidad
+  → Creates unique ID: LOTE-[TIMESTAMP_BASE36]-[RANDOM_4]
+  → Guarantees uniqueness + readability
 ```
 
-**Estado Actual**: Mock/simulated para demostración. Ready para integración real con Stellar SDK.
+**Current Status**: Mock/simulated for demonstration. Ready for real Stellar SDK integration.
 
 ---
 
-## Persistencia de Datos
+## Data Persistence
 
-- **Método**: localStorage con clave `guacamole-state`
-- **Contenido**: Orchard + todos los lotes (estado completo)
-- **Auto-sync**: Actualiza automáticamente en cada cambio
-- **Duración**: Persiste entre sesiones del navegador
-- **Reset**: Function `CLEAR_SESSION` vacía todo
+- **Method**: localStorage with key `guacamole-state`
+- **Content**: Orchard + all batches (complete state)
+- **Auto-sync**: Automatically updates on each change
+- **Duration**: Persists between browser sessions
+- **Reset**: `CLEAR_SESSION` function empties everything
 
 ---
 
-## Casos de Uso
+## Use Cases
 
-### **Producer Flow** (Productor)
-
-```
-1. Landing → Click "Probar Demo" → Modal de perfiles
-2. Select "Productor" → /app/register-orchard
-3. Capturar foto + permitir GPS → Llena forma → Register
-4. Navega a Dashboard → Ve orchard + vacío (sin lotes)
-5. Click en + FAB → /app/capture-batch
-6. Captura foto → Ingresa peso → Generate NFT
-7. Ve modal con QR → Vuelve a dashboard
-8. Nuevo lote aparece con timestamp
-```
-
-### **Intermediary Flow** (Intermediario)
+### **Producer Flow**
 
 ```
-1. Landing → Click "Probar Demo" → Select "Intermediario"
-2. Navigate a /app/qr-scanner
+1. Landing → Click "Try Demo" → Profile modal
+2. Select "Producer" → /app/register-orchard
+3. Capture photo + allow GPS → Fill form → Register
+4. Navigate to Dashboard → See orchard + empty (no batches)
+5. Click + FAB → /app/capture-batch
+6. Capture photo → Enter weight → Generate NFT
+7. See modal with QR → Back to dashboard
+8. New batch appears with timestamp
+```
+
+### **Intermediary Flow**
+
+```
+1. Landing → Click "Try Demo" → Select "Intermediary"
+2. Navigate to /app/qr-scanner
 3. Scan QR or Search by ID
 4. Fill quality form: Brix, Temperature, Destination
-5. Confirm Recepción → Blockchain
+5. Confirm Reception → Blockchain
 ```
 
-### **Consumer Flow** (Consumidor)
+### **Consumer Flow**
 
 ```
-1. Landing → Click "Probar Demo" → Select "Consumidor"
-2. Navigate a /trace/demo
-3. Timeline muestra 3 etapas
-4. Verifica TX hashes en blockchain
+1. Landing → Click "Try Demo" → Select "Consumer"
+2. Navigate to /trace/demo
+3. Timeline shows 3 stages
+4. Verify TX hashes on blockchain
 ```
 
 ---
 
-## Dependencias Clave
+## Key Dependencies
 
-| Package            | Versión | Uso           |
-| ------------------ | ------- | ------------- |
-| `react`            | 19.2.4  | UI framework  |
-| `react-router-dom` | 7.x     | Routing       |
-| `vite`             | 8.0     | Build tool    |
-| `tailwindcss`      | 4.2.2   | Styling       |
-| `qrcode.react`     | ^1.0    | QR generation |
-| `html5-qrcode`     | ^2.3    | QR scanning   |
-| `piexifjs`         | ^0.1    | EXIF metadata |
-| `lucide-react`     | ^0.x    | Icons         |
+| Package            | Version | Use            |
+| ------------------ | ------- | -------------- |
+| `react`            | 19.2.4  | UI framework   |
+| `react-router-dom` | 7.x     | Routing        |
+| `vite`             | 8.0     | Build tool     |
+| `tailwindcss`      | 4.2.2   | Styling        |
+| `qrcode.react`     | ^1.0    | QR generation  |
+| `html5-qrcode`     | ^2.3    | QR scanning    |
+| `piexifjs`         | ^0.1    | EXIF metadata  |
+| `lucide-react`     | ^0.x    | Icons          |
 
 ---
 
-## Inicio Rápido Completo
+## Complete Quick Start
 
 ```bash
-# 1. Instalación
+# 1. Installation
 npm install
 
-# 2. Desarrollo
+# 2. Development
 npm run dev              # http://localhost:5173
 
 # 3. Testing
 - Landing page: /
-- Producer demo: Click "Probar Demo" → "Productor"
-- Intermediary: Select "Intermediario"
-- Consumer: Select "Consumidor"
+- Producer demo: Click "Try Demo" → "Producer"
+- Intermediary: Select "Intermediary" 
+- Consumer: Select "Consumer"
 
 # 4. Build
 npm run build
@@ -402,15 +402,15 @@ npm run preview
 
 ---
 
-## Licencia
+## License
 
 MIT © 2026 Mx Alebrijes
 
 ---
 
-## Contacto & Soporte
+## Contact & Support
 
-- **Propuesta Valor**: Blockchain para trazabilidad agrícola 100% transparente
+- **Value Proposal**: Blockchain for 100% transparent agricultural traceability
 - **Powered by**: Stellar & Soroban
 - **Built with**: React + Vite + Tailwind CSS
 
@@ -418,8 +418,8 @@ MIT © 2026 Mx Alebrijes
 
 <div align="center">
 
-### Guacamole — Trazabilidad Agrícola Verificable
+### Guacamole — Verifiable Agricultural Traceability
 
-**De la huerta a tu mesa, con tranquilidad.**
+**From farm to your table, with peace of mind.**
 
 </div>
